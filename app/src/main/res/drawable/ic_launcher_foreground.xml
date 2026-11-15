@@ -1,0 +1,23 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Ampulheta simples: tampas, vidro e areia. -->
+    <path
+        android:fillColor="#F2B35B"
+        android:pathData="M34,28h40v5H34z" />
+    <path
+        android:fillColor="#F2B35B"
+        android:pathData="M34,75h40v5H34z" />
+    <path
+        android:strokeColor="#F2B35B"
+        android:strokeWidth="4"
+        android:pathData="M39,33c0,11 15,16 15,21s-15,10 -15,21M69,33c0,11 -15,16 -15,21s15,10 15,21" />
+    <path
+        android:fillColor="#F6C67F"
+        android:pathData="M54,54L43,38h22z" />
+    <path
+        android:fillColor="#F6C67F"
+        android:pathData="M54,56l12,16H42z" />
+</vector>
