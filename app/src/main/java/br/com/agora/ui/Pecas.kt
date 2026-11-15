@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.agora.ui.theme.Cores
@@ -94,6 +96,7 @@ fun BotaoCheio(
         enabled = ligado,
         modifier = modifier.height(altura.dp),
         shape = RoundedCornerShape(16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Cores.Destaque,
             contentColor = Cores.SobreDestaque,
@@ -104,7 +107,7 @@ fun BotaoCheio(
         if (icone != null) {
             Icon(painter = icone, contentDescription = null, modifier = Modifier.padding(end = 8.dp).size(22.dp))
         }
-        Text(texto, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+        Text(texto, fontSize = 17.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
@@ -123,6 +126,7 @@ fun BotaoVazado(
         enabled = ligado,
         modifier = modifier.height(altura.dp),
         shape = RoundedCornerShape(14.dp),
+        contentPadding = PaddingValues(horizontal = 10.dp),
         border = BorderStroke(1.5.dp, if (ligado) Cores.Borda else Cores.Borda.copy(alpha = 0.45f)),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = Cores.Texto,
@@ -130,9 +134,9 @@ fun BotaoVazado(
         )
     ) {
         if (icone != null) {
-            Icon(painter = icone, contentDescription = null, modifier = Modifier.padding(end = 8.dp).size(18.dp))
+            Icon(painter = icone, contentDescription = null, modifier = Modifier.padding(end = 6.dp).size(18.dp))
         }
-        Text(texto, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+        Text(texto, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 

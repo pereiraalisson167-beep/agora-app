@@ -320,9 +320,9 @@ def main():
         note(f"erro no roteiro: {erro}")
         failures.append(f"erro no roteiro: {erro}")
         shot("99-erro")
-    finally:
-        steps.close()
-    return report()
+    resultado = report()
+    steps.close()
+    return resultado
 
 
 def roteiro_de_atualizacao(publicado, novo):
@@ -422,7 +422,7 @@ def roteiro_de_uso():
     tap("Zumbi")
     tap("5 min")
     shot("32-nada-cabe")
-    check("nada cabe quando acabaram as tarefas leves", visible("Nada cabe agora. E tudo bem."))
+    check("nada cabe quando acabaram as tarefas leves", visible(regex=r"Nada cabe agora\.\s+E tudo bem\."))
     tap("Pausa de 2 min")
     check("ampulheta da pausa", esperar_ampulheta())
     check("rotulo de pausa", visible("PAUSA"))

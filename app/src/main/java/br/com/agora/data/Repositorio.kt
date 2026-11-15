@@ -3,7 +3,12 @@ package br.com.agora.data
 import android.content.Context
 import br.com.agora.domain.Tarefa
 import br.com.agora.notify.Lembretes
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.util.Calendar
 
@@ -14,7 +19,17 @@ class Repositorio(private val context: Context) {
 
     val tarefas: Flow<List<Tarefa>> = dao.todas().map { lista -> lista.map { it.paraDominio() } }
 
-    val concluidasHoje: Flow<Int> = dao.concluidasDesde(inicioDoDia())
+    /**
+     * Quantas tarefas saíram hoje. O começo do dia é conferido a cada minuto, para o
+     * contador voltar a zero à meia-noite mesmo com o app aberto.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val concluidasHoje: Flow<Int> = flow {
+        while (true) {
+            emit(inicioDoDia())
+            delay(60_000)
+        }
+    }.distinctUntilChanged().flatMapLatest { desde -> dao.concluidasDesde(desde) }
 
     suspend fun guardar(tarefa: Tarefa): Long {
         val id = dao.inserir(tarefa.paraBanco())

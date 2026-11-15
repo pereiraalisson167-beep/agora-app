@@ -25,6 +25,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -85,7 +91,9 @@ fun TelaAgora(estado: EstadoTela, acoes: Acoes) {
         // O aviso fica no alto para não cobrir os botões de ação.
         AnimatedVisibility(
             visible = estado.aviso.isNotEmpty(),
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth()
         ) {
             Aviso(estado.aviso)
         }
@@ -105,6 +113,7 @@ private fun Aviso(texto: String) {
     Text(
         texto,
         modifier = Modifier
+            .fillMaxWidth()
             .background(Cores.Texto, RoundedCornerShape(14.dp))
             .padding(horizontal = 16.dp, vertical = 14.dp),
         color = Cores.Fundo,
@@ -125,15 +134,10 @@ private fun Cabecalho(estado: EstadoTela) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Agora", color = Cores.Texto, fontSize = 34.sp, fontWeight = FontWeight.Bold)
-                if (proxima == null) {
-                    Text(
-                        "Diga como você está. Eu escolho por você.",
-                        color = Cores.TextoFraco, fontSize = 15.sp
-                    )
-                }
-            }
+            Text(
+                "Agora", color = Cores.Texto, fontSize = 34.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
             val feitas = estado.concluidasHoje
             Row(
                 Modifier
@@ -157,6 +161,13 @@ private fun Cabecalho(estado: EstadoTela) {
                     fontSize = 14.sp, fontWeight = FontWeight.SemiBold
                 )
             }
+        }
+
+        if (proxima == null) {
+            Text(
+                "Diga como você está. Eu escolho por você.",
+                color = Cores.TextoFraco, fontSize = 15.sp
+            )
         }
 
         if (proxima != null) {
@@ -255,7 +266,19 @@ private fun Convite(estado: EstadoTela) {
     Column(
         Modifier
             .fillMaxSize()
-            .border(1.5.dp, Cores.Borda, RoundedCornerShape(22.dp))
+            .drawBehind {
+                val traco = 1.5.dp.toPx()
+                drawRoundRect(
+                    color = Cores.Borda,
+                    topLeft = Offset(traco / 2, traco / 2),
+                    size = Size(size.width - traco, size.height - traco),
+                    cornerRadius = CornerRadius(22.dp.toPx()),
+                    style = Stroke(
+                        width = traco,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 5.dp.toPx()))
+                    )
+                )
+            }
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -284,9 +307,9 @@ private fun NadaCabe(acoes: Acoes) {
             modifier = Modifier.size(44.dp)
         )
         Text(
-            "Nada cabe agora. E tudo bem.",
+            "Nada cabe agora.\nE tudo bem.",
             color = Cores.Texto, fontSize = 24.sp, fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center, lineHeight = 30.sp
         )
         Text(
             "Que tal uma pausa curta? Ou anote o que está na sua cabeça.",
@@ -294,15 +317,13 @@ private fun NadaCabe(acoes: Acoes) {
             modifier = Modifier.widthIn(max = 280.dp)
         )
         Spacer(Modifier.weight(1f))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            BotaoCheio(
-                texto = "Pausa de 2 min",
-                icone = painterResource(R.drawable.ic_pausa),
-                altura = 52,
-                modifier = Modifier.weight(1f)
-            ) { acoes.comecarPausa() }
-            BotaoVazado(texto = "Anotar", modifier = Modifier.weight(1f)) { acoes.abrirFolha() }
-        }
+        BotaoCheio(
+            texto = "Pausa de 2 min",
+            icone = painterResource(R.drawable.ic_pausa),
+            altura = 52,
+            modifier = Modifier.fillMaxWidth()
+        ) { acoes.comecarPausa() }
+        BotaoVazado(texto = "Anotar", modifier = Modifier.fillMaxWidth()) { acoes.abrirFolha() }
     }
 }
 
@@ -339,7 +360,7 @@ private fun CartaoDaTarefa(
             BotaoCheio(
                 texto = "Começar",
                 icone = painterResource(R.drawable.ic_play),
-                modifier = Modifier.weight(1.4f)
+                modifier = Modifier.weight(1.25f)
             ) { acoes.comecar() }
             BotaoVazado(
                 texto = if (sobrando > 0) "Trocar ($sobrando)" else "Sem trocas",
