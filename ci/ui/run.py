@@ -326,12 +326,15 @@ def roteiro_de_atualizacao(publicado, novo):
         visible("Lavar a louca do jantar") or visible("Regar as plantas"),
     )
     shot("15-tarefa-escolhida-apos-atualizar")
-    tap("Escolher a próxima", optional=True, scrolls=0, wait=2)
 
 
 def roteiro_de_uso():
     """Percorre escolher, fazer, parar, concluir, a pausa e o Mais 5 min."""
     # ---- escolher
+    # Fecha o app antes para a tela começar limpa: a energia e o tempo escolhidos
+    # no roteiro de atualização continuariam marcados.
+    adb("shell", "am", "force-stop", PKG)
+    time.sleep(2)
     abrir_app()
     shot("20-escolher-vazio")
     check("convite para escolher", visible("Toque nas duas escolhas acima. Eu mostro uma tarefa só."))
