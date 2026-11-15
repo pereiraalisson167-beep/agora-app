@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -298,32 +298,38 @@ private fun Convite(estado: EstadoTela) {
 
 @Composable
 private fun NadaCabe(acoes: Acoes) {
-    Cartao(Modifier.fillMaxSize(), espaco = 14, alinhamento = Alignment.CenterHorizontally) {
-        Spacer(Modifier.weight(1f))
-        Icon(
-            painterResource(R.drawable.ic_lua),
-            contentDescription = null,
-            tint = Cores.Destaque,
-            modifier = Modifier.size(44.dp)
-        )
-        Text(
-            "Nada cabe agora.\nE tudo bem.",
-            color = Cores.Texto, fontSize = 24.sp, fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center, lineHeight = 30.sp
-        )
-        Text(
-            "Que tal uma pausa curta? Ou anote o que está na sua cabeça.",
-            color = Cores.TextoFraco, fontSize = 15.sp, textAlign = TextAlign.Center,
-            modifier = Modifier.widthIn(max = 280.dp)
-        )
-        Spacer(Modifier.weight(1f))
+    // O "Anotar tarefa" fica sempre logo abaixo do cartão, então aqui basta a pausa.
+    Cartao(Modifier.fillMaxSize(), espaco = 12, alinhamento = Alignment.CenterHorizontally) {
+        Column(
+            Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painterResource(R.drawable.ic_lua),
+                contentDescription = null,
+                tint = Cores.Destaque,
+                modifier = Modifier.size(40.dp)
+            )
+            Text(
+                "Nada cabe agora.\nE tudo bem.",
+                color = Cores.Texto, fontSize = 24.sp, fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center, lineHeight = 30.sp
+            )
+            Text(
+                "Que tal uma pausa curta? Ou anote o que está na sua cabeça.",
+                color = Cores.TextoFraco, fontSize = 15.sp, textAlign = TextAlign.Center,
+                modifier = Modifier.widthIn(max = 280.dp)
+            )
+        }
         BotaoCheio(
             texto = "Pausa de 2 min",
             icone = painterResource(R.drawable.ic_pausa),
             altura = 52,
             modifier = Modifier.fillMaxWidth()
         ) { acoes.comecarPausa() }
-        BotaoVazado(texto = "Anotar", modifier = Modifier.fillMaxWidth()) { acoes.abrirFolha() }
     }
 }
 
@@ -337,25 +343,34 @@ private fun CartaoDaTarefa(
 ) {
     val recado = recadoDeTroca(LIMITE_DE_TROCAS, estado.trocasFeitas, quantasCabem, sobrando)
     Cartao(Modifier.fillMaxSize()) {
-        Etiqueta("Sua tarefa agora")
-        Text(
-            tarefa.titulo, color = Cores.Texto, fontSize = 27.sp,
-            fontWeight = FontWeight.SemiBold, lineHeight = 31.sp
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Selo(painterResource(R.drawable.ic_relogio), rotuloTempo(tarefa.minutos))
-            Selo(painterResource(iconeDaEnergia(tarefa.energia)), rotuloEnergia(tarefa.energia))
+        // Em tela baixa ou com título longo, é o texto que encolhe; os botões nunca.
+        Column(
+            Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Etiqueta("Sua tarefa agora")
+            Text(
+                tarefa.titulo, color = Cores.Texto, fontSize = 27.sp,
+                fontWeight = FontWeight.SemiBold, lineHeight = 31.sp,
+                maxLines = 3, overflow = TextOverflow.Ellipsis
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Selo(painterResource(R.drawable.ic_relogio), rotuloTempo(tarefa.minutos))
+                Selo(painterResource(iconeDaEnergia(tarefa.energia)), rotuloEnergia(tarefa.energia))
+            }
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Cores.Texto, fontWeight = FontWeight.SemiBold)) {
+                        append("Por que esta? ")
+                    }
+                    append(porQueEsta(tarefa, estado.energia ?: tarefa.energia, estado.relogio))
+                },
+                color = Cores.TextoFraco, fontSize = 15.sp, lineHeight = 22.sp,
+                maxLines = 4, overflow = TextOverflow.Ellipsis
+            )
         }
-        Text(
-            text = buildAnnotatedString {
-                withStyle(SpanStyle(color = Cores.Texto, fontWeight = FontWeight.SemiBold)) {
-                    append("Por que esta? ")
-                }
-                append(porQueEsta(tarefa, estado.energia ?: tarefa.energia, estado.relogio))
-            },
-            color = Cores.TextoFraco, fontSize = 15.sp, lineHeight = 22.sp
-        )
-        Spacer(Modifier.weight(1f))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             BotaoCheio(
                 texto = "Começar",
@@ -415,13 +430,14 @@ private fun BlocoFazendo(estado: EstadoTela, acoes: Acoes) {
         )
         Text(
             fazendo.titulo, color = Cores.Texto, fontSize = 24.sp,
-            fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, lineHeight = 29.sp
+            fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, lineHeight = 29.sp,
+            maxLines = 2, overflow = TextOverflow.Ellipsis
         )
 
         Box(
             Modifier
                 .fillMaxWidth()
-                .height(280.dp),
+                .weight(1f),
             contentAlignment = Alignment.Center
         ) {
             AndroidView(
@@ -434,7 +450,10 @@ private fun BlocoFazendo(estado: EstadoTela, acoes: Acoes) {
                     }
                 },
                 update = { vista -> vista.definirCiclo(fazendo.inicioUptime, fazendo.totalSegundos) },
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 280.dp)
+                    .fillMaxHeight()
             )
             if (!estado.ampulhetaPronta) {
                 Text(
@@ -445,7 +464,6 @@ private fun BlocoFazendo(estado: EstadoTela, acoes: Acoes) {
             }
         }
 
-        Spacer(Modifier.weight(1f))
         BotaoCheio(
             texto = "Concluí",
             icone = painterResource(R.drawable.ic_check),
@@ -480,7 +498,13 @@ private fun BlocoFazendo(estado: EstadoTela, acoes: Acoes) {
 @Composable
 private fun BlocoFeito(estado: EstadoTela, acoes: Acoes) {
     Cartao(Modifier.fillMaxSize(), espaco = 14, alinhamento = Alignment.CenterHorizontally) {
-        Spacer(Modifier.weight(1f))
+        Column(
+            Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Box(
             Modifier
                 .size(88.dp)
@@ -497,13 +521,14 @@ private fun BlocoFeito(estado: EstadoTela, acoes: Acoes) {
         Text("Feito!", color = Cores.Texto, fontSize = 40.sp, fontWeight = FontWeight.Bold)
         Text(
             estado.ultimaFeita, color = Cores.TextoFraco, fontSize = 16.sp,
-            textAlign = TextAlign.Center, textDecoration = TextDecoration.LineThrough
+            textAlign = TextAlign.Center, textDecoration = TextDecoration.LineThrough,
+            maxLines = 2, overflow = TextOverflow.Ellipsis
         )
         Text(
             resumoDoDia(estado.concluidasHoje), color = Cores.Texto,
             fontSize = 16.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center
         )
-        Spacer(Modifier.weight(1f))
+        }
         BotaoCheio(texto = "Escolher a próxima", modifier = Modifier.fillMaxWidth()) { acoes.proxima() }
     }
 }
