@@ -1,6 +1,5 @@
 package br.com.agora.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
@@ -34,9 +33,8 @@ private val esquema = darkColorScheme(
     error = Cores.DestaqueClaro
 )
 
+/** O app tem um só visual, escuro, igual ao do protótipo — não segue o tema do sistema. */
 @Composable
 fun TemaAgora(content: @Composable () -> Unit) {
-    // O app tem um só visual, escuro, igual ao do protótipo.
-    @Suppress("UNUSED_EXPRESSION") isSystemInDarkTheme()
     MaterialTheme(colorScheme = esquema, content = content)
 }
