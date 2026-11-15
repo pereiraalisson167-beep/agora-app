@@ -1,0 +1,128 @@
+instalando versao publicada: ui-old.apk
+Serving...
+Performing Incremental Install
+Success
+Install command complete in 3656 ms
+All files should be loaded. Notifying the device.
+ok: instalacao de versao publicada
+toque: Allow (540,1304)
+imagem: 01-versao-publicada
+toque: Anotar tarefa (572,2205)
+toque: campo 0 (540,1265)
+toque: até 15 min (539,1528)
+toque: Média (571,1785)
+toque: Guardar (540,2137)
+toque: Não, guardar assim (540,2142)
+imagem: 02-tarefa-anotada
+toque: Anotar tarefa (572,2205)
+toque: campo 0 (540,1265)
+toque: até 5 min (250,1528)
+toque: Pouca (282,1785)
+toque: Guardar (540,2137)
+toque: Não, guardar assim (540,2142)
+toque: Anotar tarefa (572,2205)
+toque: campo 0 (540,1265)
+toque: até 5 min (250,1528)
+toque: Pouca (282,1785)
+imagem: 06-formulario-preenchido
+toque: Guardar (540,2137)
+imagem: 07-definir-data
+toque: Sim, definir data (540,1958)
+imagem: 08-passo-dia
+toque: 16 (294,1889)
+imagem: 09-passo-mes
+toque: Novembro (540,2148)
+imagem: 10-passo-ano
+toque: 2026 (540,1801)
+imagem: 11-passo-horario
+toque: 08 (468,1326)
+toque: 30 (180,1964)
+imagem: 11b-horario-escolhido
+toque: Continuar (540,2137)
+imagem: 12-passo-observacao
+toque: campo 0 (540,1854)
+toque: Guardar tarefa (540,2137)
+imagem: 13-tarefa-com-data
+ok: contagem da tarefa com data
+instalando versao nova por cima: ui-new.apk
+Serving...
+Performing Incremental Install
+Success
+Install command complete in 407 ms
+All files should be loaded. Notifying the device.
+ok: instalacao de versao nova por cima
+NAO ENCONTRADO: Allow
+NAO ENCONTRADO: ALLOW
+NAO ENCONTRADO: Permitir
+NAO ENCONTRADO: While using the app
+NAO ENCONTRADO: Only this time
+imagem: 14-depois-de-atualizar
+toque: Moderado (540,795)
+toque: 15 min (540,1068)
+ok: tarefas continuam depois de atualizar
+imagem: 15-tarefa-escolhida-apos-atualizar
+NAO ENCONTRADO: Allow
+NAO ENCONTRADO: ALLOW
+NAO ENCONTRADO: Permitir
+NAO ENCONTRADO: While using the app
+NAO ENCONTRADO: Only this time
+imagem: 20-escolher-vazio
+ok: convite para escolher
+toque: Foco (868,795)
+imagem: 21-so-energia
+ok: pede o tempo
+toque: 45 min+ (869,1068)
+imagem: 22-tarefa-escolhida
+ok: explicacao da escolha
+toque: Trocar \(\d\) (813,1942)
+imagem: 23-depois-de-trocar
+ok: as trocas acabam
+imagem: 24-sem-trocas
+toque: Começar (384,1847)
+imagem: 25-ampulheta-comecando
+ok: ampulheta ficou pronta
+imagem: 26-ampulheta-pronta
+ok: rotulo de fazendo agora
+ok: ampulheta tem descricao para acessibilidade
+toque: Parar (571,1842)
+imagem: 27-depois-de-parar
+ok: parar volta para a escolha
+toque: Moderado (540,795)
+toque: 15 min (540,1068)
+imagem: 28-tarefa-media
+toque: Começar (384,1942)
+toque: Concluí (580,1658)
+imagem: 29-feito
+ok: tela de feito
+ok: resumo no singular
+toque: Escolher a próxima (540,1942)
+ok: contador do dia no topo
+toque: Zumbi (212,795)
+toque: 5 min (212,1068)
+imagem: 30-tarefa-leve
+toque: Começar (384,1847)
+toque: Concluí (580,1658)
+imagem: 31-feito-plural
+ok: resumo no plural
+toque: Escolher a próxima (540,1942)
+toque: Zumbi (212,795)
+toque: 5 min (212,1068)
+imagem: 32-nada-cabe
+ok: nada cabe quando acabaram as tarefas leves
+toque: Pausa de 2 min (579,1947)
+ok: ampulheta da pausa
+ok: rotulo de pausa
+imagem: 33-pausa
+esperando o tempo da pausa acabar (cerca de 2 min)
+ok: o botao Mais 5 min aparece quando o tempo acaba
+imagem: 34-tempo-acabou
+ok: rotulo de tempo esgotado
+toque rapido: Mais 5 min (321,1842)
+imagem: 35-virando-a-ampulheta
+imagem: 36-ciclo-novo
+ok: segue na tela de fazer depois de virar
+ok: o rotulo volta a ser de pausa
+toque: Parar (571,1842)
+imagem: 37-tela-final
+ok: contagem da tarefa com data segue na tela
+app em execucao: True; erro fatal: False; passos com problema: []
