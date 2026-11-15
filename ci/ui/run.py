@@ -183,6 +183,24 @@ def hide_keyboard():
 
 
 
+def device_today():
+    """A data de hoje no emulador (ele roda em UTC, igual ao app lá dentro)."""
+    raw = adb("shell", "date", "+%Y-%m-%d").stdout.decode().strip()
+    return datetime.date.fromisoformat(raw)
+
+
+def toque_rapido(texto):
+    """Toca sem a espera do tap(), para fotografar uma animação no meio."""
+    alvos = find(texto)
+    if not alvos:
+        fail(texto)
+        return False
+    x, y = center(alvos[0])
+    adb("shell", "input", "tap", str(x), str(y))
+    note(f"toque rapido: {texto} ({x},{y})")
+    return True
+
+
 def permitir_avisos():
     """Fecha o pedido de permissão de notificação da primeira abertura."""
     for rotulo in ("Allow", "ALLOW", "Permitir", "While using the app", "Only this time"):
@@ -244,7 +262,9 @@ def anotar_com_data(titulo, obs):
     hide_keyboard()
     tap("até 5 min")
     tap("Pouca")
+    shot("06-formulario-preenchido")
     tap("Guardar")
+    shot("07-definir-data")
     tap("Sim, definir data")
     shot("08-passo-dia")
     tap(str(amanha.day))
@@ -254,7 +274,8 @@ def anotar_com_data(titulo, obs):
     tap(str(amanha.year))
     shot("11-passo-horario")
     tap("08")
-    tap("05")
+    tap("30")
+    shot("11b-horario-escolhido")
     tap("Continuar")
     shot("12-passo-observacao")
     tap_campo("Observação (obrigatória)", 0)
@@ -363,22 +384,35 @@ def roteiro_de_uso():
     time.sleep(4)
     shot("26-ampulheta-pronta")
     check("rotulo de fazendo agora", visible("FAZENDO AGORA"))
+    check("ampulheta tem descricao para acessibilidade",
+          visible("Ampulheta: a areia cai durante o tempo da tarefa"))
     tap("Parar")
     shot("27-depois-de-parar")
-    check("aviso ao parar", visible("Tudo bem. A tarefa voltou para a lista."))
+    check("parar volta para a escolha", visible("Como está sua energia?"))
 
-    # ---- concluir
+    # ---- concluir a primeira (singular)
     tap("Moderado")
     tap("15 min")
+    shot("28-tarefa-media")
     tap("Começar")
     esperar_ampulheta()
     tap("Concluí")
-    shot("28-feito")
+    shot("29-feito")
     check("tela de feito", visible("Feito!"))
     check("resumo no singular", visible("1 tarefa concluída hoje."))
     tap("Escolher a próxima")
-    shot("29-de-volta-ao-escolher")
     check("contador do dia no topo", visible("Hoje: 1"))
+
+    # ---- concluir a segunda (plural)
+    tap("Zumbi")
+    tap("5 min")
+    shot("30-tarefa-leve")
+    tap("Começar")
+    esperar_ampulheta()
+    tap("Concluí")
+    shot("31-feito-plural")
+    check("resumo no plural", visible("2 tarefas concluídas hoje."))
+    tap("Escolher a próxima")
 
     # ---- nada cabe e a pausa de 2 minutos
     # O emulador roda com as animações desligadas, e o app respeita isso trocando a virada
@@ -387,41 +421,49 @@ def roteiro_de_uso():
     adb("shell", "settings", "put", "global", "animator_duration_scale", "1")
     tap("Zumbi")
     tap("5 min")
-    shot("30-nada-cabe-ou-tarefa")
-    if visible("Nada cabe agora. E tudo bem."):
-        tap("Pausa de 2 min")
-    else:
-        note("aviso: ainda havia tarefa para pouca energia; a pausa foi aberta pela tela cheia")
-        tap("Começar")
-    shot("31-pausa-ou-tarefa")
+    shot("32-nada-cabe")
+    check("nada cabe quando acabaram as tarefas leves", visible("Nada cabe agora. E tudo bem."))
+    tap("Pausa de 2 min")
     check("ampulheta da pausa", esperar_ampulheta())
+    check("rotulo de pausa", visible("PAUSA"))
+    time.sleep(3)
+    shot("33-pausa")
 
     # ---- Mais 5 min: espera o tempo acabar de verdade (a ampulheta não segue o relógio do sistema)
     note("esperando o tempo da pausa acabar (cerca de 2 min)")
     acabou = False
-    for _ in range(80):
+    for _ in range(60):
         if visible("Mais 5 min"):
             acabou = True
             break
         time.sleep(3)
     check("o botao Mais 5 min aparece quando o tempo acaba", acabou)
     if acabou:
-        shot("32-tempo-acabou")
+        shot("34-tempo-acabou")
         check("rotulo de tempo esgotado", visible("O TEMPO ACABOU"))
-        tap("Mais 5 min")
-        time.sleep(2)
-        shot("33-virando-a-ampulheta")
-        time.sleep(4)
-        shot("34-ciclo-novo")
-        check("segue na tela de fazer depois de virar", visible("Concluí"))
+        if toque_rapido("Mais 5 min"):
+            time.sleep(0.45)
+            shot_rapido("35-virando-a-ampulheta")
+            time.sleep(3)
+            shot("36-ciclo-novo")
+            check("segue na tela de fazer depois de virar", visible("Concluí"))
+            check("o rotulo volta a ser de pausa", visible("PAUSA"))
         tap("Parar")
 
     # ---- a tarefa com data e a contagem no topo
-    shot("35-tela-final")
+    shot("37-tela-final")
     if visible("faltam"):
         check("contagem da tarefa com data segue na tela", True)
     else:
         note("aviso: nenhuma tarefa com data na tela final")
+
+
+def shot_rapido(nome):
+    """Foto sem a espera do shot(), para pegar a virada no meio."""
+    data = adb("exec-out", "screencap", "-p").stdout
+    with open(os.path.join(OUT, nome + ".png"), "wb") as f:
+        f.write(data)
+    note(f"imagem: {nome}")
 
 
 def report():
