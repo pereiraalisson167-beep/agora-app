@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Agora"
+include(":app")
