@@ -47,10 +47,43 @@ energia que combina → mais tempo esperando.
 - As camadas foram desenhadas fora do Android e a imagem conferida a olho: madeira, vidro,
   latão e os níveis de areia saíram iguais aos do original.
 
+## Versões publicadas
+
+| Release | Data | O que mudou |
+|---|---|---|
+| v1.0.0-2 | 15/11/2026 | Primeiro build que compilou. Não foi entregue. |
+| **v1.0.0-3** | 15/11/2026 | **Primeira entregue.** Ajustes da revisão das telas. |
+
+Conferido na v1.0.0-3 com androguard: pacote `br.com.agora`, certificado SHA-256
+`f310be3f25f0b676…1604f079` (o mesmo da v2) e versionCode 3 > 2 — a atualização
+instala por cima.
+
+## Teste no emulador (API 34, pixel_6)
+
+Rodada verde: 24 conferências, nenhuma queda, nenhum aviso do app. O roteiro
+(`ci/ui/run.py`) instala a versão publicada, anota duas tarefas e uma com data,
+instala a nova por cima e confere que tudo continua; depois percorre escolher,
+trocar até acabar, fazer com a ampulheta, parar, concluir (singular e plural),
+"nada cabe", pausa de 2 minutos esperando o tempo acabar de verdade e "Mais 5 min"
+com a virada fotografada no meio.
+
+Problemas achados na revisão das imagens e corrigidos: botões quebrando em duas
+linhas, subtítulo com palavra sozinha, aviso por cima do título, "nada cabe" com
+botões espremidos, e o contador "Hoje" que não zerava à meia-noite com o app aberto.
+
+## Instalação fora da loja (situação em 15/11/2026)
+
+Desde 30/09/2026 o Google exige, no Brasil, desenvolvedor verificado para apps
+distribuídos pelas lojas participantes (Google Play, Galaxy Store etc.). APK baixado
+direto do GitHub ainda instala pelo caminho normal. Se o celular recusar, há o
+"fluxo avançado" do Android (modo desenvolvedor, reiniciar, esperar 1 dia,
+confirmar). A expansão para todos os apps está prevista para 2027 — aí a conta
+gratuita de distribuição limitada (até 20 aparelhos) resolve.
+
 ## Pendências
 
-- Rodar o primeiro build e a primeira rodada no emulador.
-- Publicar a versão 1.0.0 e instalar no celular (moto g35 5g) — nada foi testado em
-  aparelho real ainda.
-- Decidir depois, se fizer falta: backup por arquivo, lista de tarefas para editar/excluir,
-  fotos antes/depois.
+- Instalar no celular (moto g35 5g) e testar de verdade — nada foi testado em
+  aparelho real ainda. Pontos a observar: tempo do "Preparando a ampulheta…" na
+  primeira tarefa, fluidez da areia, se o lembrete chega na hora marcada.
+- Decidir depois, se fizer falta: backup por arquivo, lista de tarefas para
+  editar/excluir, fotos antes/depois.
